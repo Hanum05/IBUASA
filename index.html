@@ -1,1 +1,1282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IBUASA - Kenali kebutuhanmu.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Color Palette */
+            --primary-green: #6FAF8F;
+            --primary-green-hover: #5A9678;
+            --soft-green: #EAF5EE;
+            --cream: #FFF9F3;
+            --soft-pink: #F8DDE4;
+            --pink-accent: #D98FA3;
+            --soft-purple: #E9E3F5;
+            --dark-text: #26352E;
+            --muted-text: #6B7771;
+            --white: #FFFFFF;
+            --border-color: #E2E8F0;
+            
+            /* Shadows & Radii */
+            --shadow-sm: 0 2px 8px rgba(38, 53, 46, 0.04);
+            --shadow-md: 0 8px 24px rgba(38, 53, 46, 0.06);
+            --shadow-lg: 0 12px 32px rgba(38, 53, 46, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-full: 999px;
 
+            /* Typography */
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--cream);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { cursor: pointer; font-family: inherit; border: none; background: none; }
+        
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .desktop-nav {
+            display: none;
+            gap: 1.5rem;
+        }
+
+        .desktop-nav a {
+            font-weight: 500;
+            color: var(--muted-text);
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .desktop-nav a:hover, .desktop-nav a.active {
+            color: var(--primary-green);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-btn {
+            background-color: var(--soft-green);
+            color: var(--primary-green);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+        .profile-btn:hover { transform: scale(1.05); }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 2rem 5% 6rem 5%; /* Bottom padding for mobile nav */
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .page-section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Bottom Nav */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 0;
+            z-index: 100;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--muted-text);
+            font-size: 0.75rem;
+            gap: 0.3rem;
+            transition: color 0.3s;
+        }
+        .mobile-nav-item i { font-size: 1.2rem; }
+        .mobile-nav-item.active { color: var(--primary-green); }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: inline-block;
+        }
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(111, 175, 143, 0.3);
+        }
+        .btn-primary:hover { background-color: var(--primary-green-hover); transform: translateY(-2px); }
+        .btn-outline {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+        .btn-outline:hover { background-color: var(--soft-green); }
+        .btn-pink { background-color: var(--pink-accent); color: white; }
+        
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header { text-align: center; margin-bottom: 2.5rem; }
+        .section-header h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        .section-header p { color: var(--muted-text); }
+
+        .disclaimer-box {
+            background-color: var(--soft-pink);
+            border-left: 4px solid var(--pink-accent);
+            padding: 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-size: 0.85rem;
+            color: var(--dark-text);
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .disclaimer-box i { color: var(--pink-accent); font-size: 1.2rem; margin-top: 0.2rem;}
+
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        /* Home */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--soft-green) 0%, var(--cream) 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: 3rem;
+        }
+        .hero h1 { font-size: 3rem; color: var(--primary-green); margin-bottom: 1rem; line-height: 1.2;}
+        .hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem auto; color: var(--muted-text);}
+        .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;}
+
+        .pillars { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 3rem;}
+        .pillar-badge {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .bg-green { background: var(--soft-green); color: var(--primary-green); }
+        .bg-pink { background: var(--soft-pink); color: var(--pink-accent); }
+        .bg-purple { background: var(--soft-purple); color: #8A6BB8; }
+
+        /* IBUASA Check */
+        .check-container { max-width: 600px; margin: 0 auto; }
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin: 1rem 0 2rem 0;
+            overflow: hidden;
+        }
+        .progress-bar { height: 100%; background: var(--primary-green); transition: width 0.3s ease; }
+        
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s; }
+        
+        .option-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .option-card:hover { border-color: var(--primary-green); background: var(--soft-green); }
+        .option-card.selected {
+            border-color: var(--primary-green);
+            background: var(--soft-green);
+        }
+        .option-card input[type="radio"] { display: none; }
+
+        .check-actions { display: flex; justify-content: space-between; margin-top: 2rem; }
+
+        /* Result Profile */
+        .profile-result { text-align: center; }
+        .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+        .score-card { padding: 1.5rem; border-radius: var(--radius-lg); text-align: center; }
+        .score-val { font-size: 1.2rem; font-weight: 600; margin-top: 0.5rem; }
+
+        /* Prepare */
+        .course-card { display: flex; flex-direction: column; height: 100%; }
+        .course-icon { font-size: 2rem; color: var(--primary-green); margin-bottom: 1rem; }
+        .course-meta { font-size: 0.8rem; color: var(--muted-text); margin-bottom: 0.5rem; }
+        .course-card h3 { margin-bottom: 0.5rem; }
+        .course-card p { flex: 1; font-size: 0.9rem; color: var(--muted-text); margin-bottom: 1.5rem; }
+
+        .community-post { border-bottom: 1px solid var(--border-color); padding: 1rem 0; }
+        .community-post:last-child { border-bottom: none; }
+        .post-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .post-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--soft-green); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--primary-green);}
+        
+        /* Protect */
+        .breathing-container {
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--soft-purple);
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            position: relative;
+        }
+        .breath-circle {
+            width: 100px;
+            height: 100px;
+            background: rgba(138, 107, 184, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 4s ease-in-out;
+            border: 2px solid #8A6BB8;
+        }
+        .breath-circle.inhale { transform: scale(1.8); }
+        .breath-circle.hold { transform: scale(1.8); transition: none; } /* Wait */
+        .breath-circle.exhale { transform: scale(1); }
+        .breath-text { font-family: var(--font-heading); font-weight: 600; color: #8A6BB8; position: absolute; z-index: 10; }
+
+        /* Propel */
+        .path-container { position: relative; padding-left: 2rem; margin: 2rem 0; }
+        .path-container::before {
+            content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+            width: 2px; background: var(--border-color);
+        }
+        .path-item { position: relative; margin-bottom: 1.5rem; }
+        .path-item::before {
+            content: ''; position: absolute; left: -2rem; top: 5px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--white); border: 2px solid var(--primary-green);
+        }
+        .path-item.completed::before { background: var(--primary-green); }
+
+        /* Care Bridge */
+        .bridge-diagram { text-align: center; margin-bottom: 3rem; }
+        .bridge-flow { display: flex; flex-direction: column; align-items: center; gap: 1rem; color: var(--muted-text); }
+        .partner-card { display: flex; flex-direction: column; height: 100%; border-top: 4px solid var(--border-color); }
+        .partner-card.posyandu { border-color: #6FAF8F; }
+        .partner-card.puskesmas { border-color: #4A90E2; }
+        .partner-card.klinik { border-color: #9013FE; }
+        .partner-card.psikolog { border-color: #F5A623; }
+
+        /* Journey */
+        .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .stat-card {
+            background: var(--white); padding: 1.5rem; border-radius: var(--radius-md);
+            text-align: center; box-shadow: var(--shadow-sm);
+        }
+        .stat-card h3 { font-size: 2rem; color: var(--primary-green); margin-bottom: 0.5rem; }
+
+        /* Modals & Toasts */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-content {
+            background: var(--white); padding: 2rem; border-radius: var(--radius-lg);
+            width: 90%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto;
+        }
+        .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--muted-text); }
+
+        .toast-container { position: fixed; bottom: 5rem; right: 1rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.5rem;}
+        .toast {
+            background: var(--dark-text); color: var(--white); padding: 1rem 1.5rem;
+            border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+            animation: slideInRight 0.3s, fadeOut 0.3s 2.7s forwards;
+            font-size: 0.9rem;
+        }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        /* Forms */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-control {
+            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border-color);
+            border-radius: var(--radius-md); font-family: inherit; font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary-green); }
+        textarea.form-control { resize: vertical; min-height: 100px; }
+
+        /* Footer */
+        footer {
+            background: var(--white); text-align: center; padding: 3rem 5% 6rem 5%;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-logo { font-family: var(--font-heading); font-size: 1.5rem; color: var(--primary-green); font-weight: 700; margin-bottom: 1rem;}
+        .footer-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;}
+        .footer-links a { color: var(--muted-text); font-size: 0.9rem; }
+
+        @media (min-width: 768px) {
+            .desktop-nav { display: flex; }
+            .mobile-nav { display: none; }
+            main { padding-bottom: 3rem; }
+            footer { padding-bottom: 3rem; }
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-3 { grid-template-columns: repeat(3, 1fr); }
+            .stat-grid { grid-template-columns: repeat(4, 1fr); }
+            .check-actions { flex-direction: row; }
+            .hero h1 { font-size: 4rem; }
+            .toast-container { bottom: 2rem; right: 2rem; }
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-2 { margin-top: 2rem; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="logo" onclick="app.navigate('home')">IBUASA</div>
+            <nav class="desktop-nav">
+                <a href="#" data-nav="home" class="active">Home</a>
+                <a href="#" data-nav="check">Check</a>
+                <a href="#" data-nav="prepare">Prepare</a>
+                <a href="#" data-nav="protect">Protect</a>
+                <a href="#" data-nav="propel">Propel</a>
+                <a href="#" data-nav="bridge">Care Bridge</a>
+                <a href="#" data-nav="journey">Journey</a>
+            </nav>
+            <div class="header-actions">
+                <button class="profile-btn" onclick="app.openModal('profileModal')" aria-label="Profile">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <section id="page-home" class="page-section active">
+                <div class="hero">
+                    <h1>Kenali kebutuhanmu.<br>Siapkan dirimu.<br>Temukan dukunganmu.</h1>
+                    <p>IBUASA hadir untuk menemani perjalanan ibu melalui edukasi, pemetaan kebutuhan, dukungan, pemberdayaan, dan konektivitas layanan nyata.</p>
+                    <div class="hero-btns">
+                        <button class="btn btn-primary" onclick="app.navigate('check')">Mulai IBUASA Check</button>
+                        <button class="btn btn-outline" onclick="app.navigate('prepare')">Jelajahi IBUASA</button>
+                    </div>
+                    
+                    <div class="pillars">
+                        <span class="pillar-badge bg-green"><i class="fa-solid fa-clipboard-check"></i> Check</span>
+                        <span class="pillar-badge bg-green"><i class="fa-solid fa-seedling"></i> Prepare</span>
+                        <span class="pillar-badge bg-pink"><i class="fa-solid fa-heart"></i> Protect</span>
+                        <span class="pillar-badge bg-green" style="background:#FDF5E6; color:#D4A373"><i class="fa-solid fa-briefcase"></i> Propel</span>
+                        <span class="pillar-badge bg-purple"><i class="fa-solid fa-handshake"></i> Care Bridge</span>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h3><i class="fa-solid fa-bridge" style="color: var(--primary-green);"></i> IBUASA IS A BRIDGE.</h3>
+                        <p class="mt-2 text-muted">Perjalanan ibu tidak harus dijalani sendiri. Kami membantu Anda memetakan kebutuhan awal dan menghubungkan Anda dengan layanan yang tepat.</p>
+                        <p class="mt-2 text-muted">Platform ini tidak menggantikan peran tenaga kesehatan profesional, psikolog, atau fasilitas medis.</p>
+                    </div>
+                    <div class="card bg-green text-center" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <h3 class="mb-1">Sudah siap memulai?</h3>
+                        <p class="mb-2">Kenali kondisi dan kebutuhanmu saat ini.</p>
+                        <button class="btn btn-primary" onclick="app.navigate('check')">Mulai Sekarang</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-check" class="page-section">
+                <div class="section-header">
+                    <h2>IBUASA CHECK 🌷</h2>
+                    <p>Kenali kebutuhanmu. Ini adalah langkah pertama perjalananmu.</p>
+                </div>
+
+                <!-- Intro State -->
+                <div id="check-intro" class="card check-container text-center">
+                    <i class="fa-solid fa-clipboard-list" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 1rem;"></i>
+                    <h3 class="mb-1">Pemetaan Kebutuhan Awal</h3>
+                    <p class="mb-2 text-muted">Jawab beberapa pertanyaan singkat untuk membantu IBUASA menyusun <b>Personal Care Profile</b> dan rekomendasi yang tepat untukmu.</p>
+                    
+                    <div class="disclaimer-box" style="text-align: left;">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>
+                            <strong>Penting:</strong>
+                            <p>IBUASA bukan alat diagnosis medis atau psikologis. Hasil check-in hanya berupa gambaran awal untuk membantu memetakan kebutuhan.</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary mt-2" onclick="checkEngine.start()">Mulai Check-in</button>
+                </div>
+
+                <!-- Form State -->
+                <div id="check-form" class="card check-container hidden">
+                    <div class="text-muted" style="text-align: right; font-size: 0.9rem;" id="step-indicator">Step 1 / 5</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="check-progress" style="width: 20%;"></div>
+                    </div>
+                    
+                    <div id="questions-container">
+                        <!-- Questions will be injected here by JS -->
+                    </div>
+
+                    <div class="check-actions">
+                        <button class="btn btn-outline" id="btn-prev-check" onclick="checkEngine.prev()" style="visibility: hidden;">Kembali</button>
+                        <button class="btn btn-primary" id="btn-next-check" onclick="checkEngine.next()">Selanjutnya</button>
+                    </div>
+                </div>
+
+                <!-- Result State -->
+                <div id="check-result" class="check-container hidden profile-result">
+                    <h3 class="mb-2">Your Personal Care Profile</h3>
+                    
+                    <div class="score-grid">
+                        <div class="card score-card bg-green">
+                            <div><i class="fa-solid fa-seedling"></i> Readiness</div>
+                            <div class="score-val" id="res-readiness">-</div>
+                        </div>
+                        <div class="card score-card bg-pink">
+                            <div><i class="fa-solid fa-heart"></i> Well-being</div>
+                            <div class="score-val" id="res-wellbeing">-</div>
+                        </div>
+                        <div class="card score-card" style="background:#FDF5E6;">
+                            <div><i class="fa-solid fa-briefcase"></i> Skill</div>
+                            <div class="score-val" id="res-economic">-</div>
+                        </div>
+                        <div class="card score-card bg-purple">
+                            <div><i class="fa-solid fa-users"></i> Support</div>
+                            <div class="score-val" id="res-social">-</div>
+                        </div>
+                    </div>
+
+                    <div class="card text-left mb-2">
+                        <h4 class="mb-1">Rekomendasi Langkah Selanjutnya:</h4>
+                        <ul id="recommendation-list" style="list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem;" class="text-muted">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="app.navigate('journey')">Lihat Mom-Journey</button>
+                </div>
+            </section>
+
+            <section id="page-prepare" class="page-section">
+                <div class="section-header">
+                    <h2>PREPARE 🌱</h2>
+                    <p>Siapkan diri, bukan hadapi sendiri. Edukasi motherhood readiness.</p>
+                </div>
+
+                <div class="grid-3 mb-2">
+                    <div class="card bg-green">
+                        <h3 class="mb-1">Readiness Tracker</h3>
+                        <p class="text-muted mb-1">Progress belajar Anda.</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 33%;" id="prepare-progress-bar"></div>
+                        </div>
+                        <p><b id="prepare-completed">1</b> / 3 Modul Selesai</p>
+                    </div>
+                </div>
+
+                <h3 class="mb-1">Motherhood Academy</h3>
+                <div class="grid-3 mb-2" id="academy-list">
+                    <!-- Cards -->
+                    <div class="card course-card">
+                        <i class="fa-solid fa-baby course-icon"></i>
+                        <div class="course-meta">Parenting • 15 Min</div>
+                        <h3>Dasar Perawatan Bayi</h3>
+                        <p>Memahami kebutuhan dasar bayi baru lahir.</p>
+                        <button class="btn btn-outline" onclick="app.completeAction('course', 'Dasar Perawatan Bayi')">Pelajari</button>
+                    </div>
+                    <div class="card course-card">
+                        <i class="fa-solid fa-comments course-icon"></i>
+                        <div class="course-meta">Komunikasi • 10 Min</div>
+                        <h3>Komunikasi Pasangan</h3>
+                        <p>Menjaga hubungan harmonis saat transisi menjadi orang tua.</p>
+                        <button class="btn btn-outline" onclick="app.completeAction('course', 'Komunikasi Pasangan')">Pelajari</button>
+                    </div>
+                    <div class="card course-card">
+                        <i class="fa-solid fa-brain course-icon"></i>
+                        <div class="course-meta">Mental Health • 20 Min</div>
+                        <h3>Mengenali Baby Blues</h3>
+                        <p>Edukasi awal mengenali perubahan emosional.</p>
+                        <button class="btn btn-outline" onclick="app.completeAction('course', 'Mengenali Baby Blues')">Pelajari</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="mb-1"><i class="fa-solid fa-users text-primary"></i> Young Mom Circle</h3>
+                    <span class="pillar-badge bg-green" style="display:inline-block; margin-bottom: 1rem; font-size:0.8rem;">Moderated Community (Prototype)</span>
+                    
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar">A</div>
+                            <b>Anda</b> <span class="text-muted" style="font-size:0.8rem;">• Baru saja</span>
+                        </div>
+                        <p class="text-muted">Halo, ada tips mengatur jadwal tidur bayi usia 2 bulan?</p>
+                    </div>
+                    <div class="community-post">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background:var(--soft-pink); color:var(--pink-accent)">S</div>
+                            <b>Siti (Moderator)</b> <span class="text-muted" style="font-size:0.8rem;">• 1 jam lalu</span>
+                        </div>
+                        <p class="text-muted">Penting untuk mengenali isyarat mengantuk (sleep cues) dari bayi ya moms, jangan tunggu sampai overtired. 💕</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-protect" class="page-section">
+                <div class="section-header">
+                    <h2>PROTECT 💗</h2>
+                    <p>Kenali perubahan emosional, temukan dukungan.</p>
+                </div>
+
+                <div class="disclaimer-box">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <strong>Disclaimer:</strong>
+                        <p>Fitur di halaman ini bertujuan untuk self-care dan monitoring awal. Jika Anda merasa kewalahan atau mengalami krisis, segera hubungi profesional atau fasilitas kesehatan terdekat (Lihat <b>Care Bridge</b>).</p>
+                    </div>
+                </div>
+
+                <div class="grid-2 mb-2">
+                    <div class="card text-center bg-pink">
+                        <i class="fa-solid fa-clipboard-user" style="font-size: 2.5rem; color: var(--pink-accent); margin-bottom: 1rem;"></i>
+                        <h3 class="mb-1">Mind-Mom Check</h3>
+                        <p class="text-muted mb-2">Check-in emosional rutin.</p>
+                        <button class="btn btn-pink" onclick="app.completeAction('mindcheck', 'Mind-Mom Check')">Lakukan Check-in</button>
+                    </div>
+                    
+                    <div class="card text-center" style="border: 2px solid var(--soft-pink);">
+                        <i class="fa-solid fa-book-journal-whills" style="font-size: 2.5rem; color: var(--pink-accent); margin-bottom: 1rem;"></i>
+                        <h3 class="mb-1">Journaling</h3>
+                        <p class="text-muted mb-2">Tuliskan perasaanmu hari ini.</p>
+                        <button class="btn btn-outline" style="border-color:var(--pink-accent); color:var(--pink-accent)" onclick="app.openModal('journalModal')">Mulai Menulis</button>
+                    </div>
+                </div>
+
+                <div class="card text-center">
+                    <h3 class="mb-1">Breathing Space</h3>
+                    <p class="text-muted">Ambil waktu sejenak untuk menenangkan diri.</p>
+                    
+                    <div class="breathing-container">
+                        <div class="breath-text" id="breath-instruction">Mulai</div>
+                        <div class="breath-circle" id="breath-circle"></div>
+                    </div>
+                    <button class="btn btn-outline" id="btn-breath" onclick="app.toggleBreathing()">Mulai Latihan (1 Menit)</button>
+                </div>
+            </section>
+
+            <section id="page-propel" class="page-section">
+                <div class="section-header">
+                    <h2>PROPEL 💼</h2>
+                    <p>Dari potensi menjadi peluang. Pemberdayaan disesuaikan dengan kondisimu.</p>
+                </div>
+
+                <div class="card bg-green mb-2" style="background:#FDF5E6;">
+                    <div class="grid-2" style="align-items: center;">
+                        <div>
+                            <h3 class="mb-1">Belum tahu mulai dari mana?</h3>
+                            <p class="text-muted mb-2">Lakukan <b>Skill Scan</b> sederhana untuk menemukan arah pengembangan potensimu.</p>
+                            <button class="btn btn-primary" style="background:#D4A373; box-shadow:none;" onclick="app.completeAction('skill', 'Skill Scan Selesai')">Mulai Skill Scan</button>
+                        </div>
+                        <div class="text-center">
+                            <i class="fa-solid fa-compass" style="font-size: 5rem; color: #D4A373;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h3 class="mb-1">Your Mom-Path</h3>
+                        <div class="path-container">
+                            <div class="path-item completed">
+                                <b>Discover</b>
+                                <p class="text-muted" style="font-size:0.85rem">Memahami minat dan waktu.</p>
+                            </div>
+                            <div class="path-item">
+                                <b>Learn</b>
+                                <p class="text-muted" style="font-size:0.85rem">Mulai modul: Digital Marketing Basics.</p>
+                            </div>
+                            <div class="path-item">
+                                <b>Build</b>
+                                <p class="text-muted" style="font-size:0.85rem">Praktik membuat rencana sederhana.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-1">Skill Academy</h3>
+                        <ul style="display:flex; flex-direction:column; gap:1rem;">
+                            <li style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+                                <div>
+                                    <b>Manajemen Keuangan Keluarga</b>
+                                    <div class="text-muted" style="font-size:0.8rem">Financial Literacy</div>
+                                </div>
+                                <button class="btn btn-outline" style="padding:0.5rem 1rem" onclick="app.completeAction('course', 'Manajemen Keuangan')">Mulai</button>
+                            </li>
+                            <li style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+                                <div>
+                                    <b>Jualan Online Dasar</b>
+                                    <div class="text-muted" style="font-size:0.8rem">Digital Business</div>
+                                </div>
+                                <button class="btn btn-outline" style="padding:0.5rem 1rem" onclick="app.completeAction('course', 'Jualan Online')">Mulai</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-bridge" class="page-section">
+                <div class="section-header">
+                    <h2>CARE BRIDGE 🤝</h2>
+                    <p>Jembatan dari platform digital menuju layanan dan bantuan nyata di sekitarmu.</p>
+                </div>
+
+                <div class="bridge-diagram">
+                    <div class="bridge-flow">
+                        <div class="pillar-badge bg-green">IBUASA Platform</div>
+                        <i class="fa-solid fa-arrow-down"></i>
+                        <div class="pillar-badge" style="border: 1px solid var(--border-color);">Identifikasi Kebutuhan</div>
+                        <i class="fa-solid fa-arrow-down"></i>
+                        <div class="pillar-badge bg-purple" style="font-size: 1.1rem; padding: 0.8rem 2rem;">Mitra Layanan Nyata</div>
+                    </div>
+                </div>
+
+                <p class="text-center text-muted mb-2">Temukan jalur dukungan yang sesuai dengan kondisimu. <i>(Data Prototype)</i></p>
+
+                <div class="grid-4">
+                    <div class="card partner-card posyandu">
+                        <h3 style="color: #6FAF8F;" class="mb-1"><i class="fa-solid fa-users"></i> POSYANDU</h3>
+                        <p class="text-muted" style="font-size:0.9rem; flex:1;">Community Support Point. Edukasi dasar, pemantauan anak, dan jembatan ke Puskesmas.</p>
+                        <button class="btn btn-outline mt-2" onclick="app.completeAction('bridge', 'Mencari Info Posyandu')">Cari Lokasi</button>
+                    </div>
+                    <div class="card partner-card puskesmas">
+                        <h3 style="color: #4A90E2;" class="mb-1"><i class="fa-solid fa-house-medical"></i> PUSKESMAS</h3>
+                        <p class="text-muted" style="font-size:0.9rem; flex:1;">Primary Care Partner. Pemeriksaan kesehatan, konsultasi ibu & anak, rujukan medis.</p>
+                        <button class="btn btn-outline mt-2" onclick="app.completeAction('bridge', 'Mencari Info Puskesmas')">Info Layanan</button>
+                    </div>
+                    <div class="card partner-card klinik">
+                        <h3 style="color: #9013FE;" class="mb-1"><i class="fa-solid fa-stethoscope"></i> KLINIK</h3>
+                        <p class="text-muted" style="font-size:0.9rem; flex:1;">Layanan spesifik kebidanan atau kandungan sesuai ketersediaan wilayah.</p>
+                        <button class="btn btn-outline mt-2" onclick="app.completeAction('bridge', 'Mencari Info Klinik')">Temukan Klinik</button>
+                    </div>
+                    <div class="card partner-card psikolog">
+                        <h3 style="color: #F5A623;" class="mb-1"><i class="fa-solid fa-brain"></i> PSIKOLOG</h3>
+                        <p class="text-muted" style="font-size:0.9rem; flex:1;">Professional Mental-Health Partner. Pendampingan psikologis dan klinis profesional.</p>
+                        <button class="btn btn-outline mt-2" onclick="app.completeAction('bridge', 'Mencari Info Psikolog')">Kontak Bantuan</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="page-journey" class="page-section">
+                <div class="section-header">
+                    <h2>MOM-JOURNEY 📈</h2>
+                    <p>Perjalanan ibu tidak berhenti setelah satu kali bantuan.</p>
+                </div>
+
+                <div id="journey-empty" class="card text-center mb-2">
+                    <i class="fa-solid fa-route" style="font-size:3rem; color:var(--border-color); margin-bottom:1rem;"></i>
+                    <h3>Perjalananmu baru akan dimulai</h3>
+                    <p class="text-muted mb-2">Lakukan IBUASA Check terlebih dahulu atau mulai akses materi untuk melihat progressmu di sini.</p>
+                    <button class="btn btn-primary" onclick="app.navigate('check')">Mulai IBUASA Check</button>
+                </div>
+
+                <div id="journey-stats" class="hidden">
+                    <div class="stat-grid mb-2">
+                        <div class="stat-card">
+                            <h3 id="stat-course">0</h3>
+                            <div class="text-muted" style="font-size:0.85rem">Materi Selesai</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat-mind">0</h3>
+                            <div class="text-muted" style="font-size:0.85rem">Well-being Check</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat-skill">0</h3>
+                            <div class="text-muted" style="font-size:0.85rem">Skill Milestones</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="stat-bridge">0</h3>
+                            <div class="text-muted" style="font-size:0.85rem">Support Accessed</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="mb-1">Recent Activity</h3>
+                        <ul id="activity-log" style="list-style:none;">
+                            <!-- Injected by JS -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Mobile Nav -->
+        <nav class="mobile-nav">
+            <div class="mobile-nav-item active" data-nav="home" onclick="app.navigate('home')">
+                <i class="fa-solid fa-house"></i><span>Home</span>
+            </div>
+            <div class="mobile-nav-item" data-nav="check" onclick="app.navigate('check')">
+                <i class="fa-solid fa-clipboard-check"></i><span>Check</span>
+            </div>
+            <div class="mobile-nav-item" data-nav="prepare" onclick="app.navigate('prepare')">
+                <i class="fa-solid fa-seedling"></i><span>Prepare</span>
+            </div>
+            <div class="mobile-nav-item" data-nav="protect" onclick="app.navigate('protect')">
+                <i class="fa-solid fa-heart"></i><span>Protect</span>
+            </div>
+            <div class="mobile-nav-item" data-nav="bridge" onclick="app.navigate('bridge')">
+                <i class="fa-solid fa-bridge"></i><span>Bridge</span>
+            </div>
+        </nav>
+
+        <!-- Profile Modal -->
+        <div class="modal-overlay" id="profileModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="app.closeModal('profileModal')">&times;</button>
+                <h3 class="mb-1">Profil Anda</h3>
+                <div class="form-group">
+                    <label>Nama Panggilan</label>
+                    <input type="text" id="profile-name" class="form-control" value="Mom">
+                </div>
+                <button class="btn btn-primary w-100" style="width:100%" onclick="app.saveProfile()">Simpan Perubahan</button>
+                <hr style="border:0; border-top:1px solid var(--border-color); margin: 1.5rem 0;">
+                <button class="btn btn-outline" style="width:100%; border-color:red; color:red;" onclick="app.resetData()">Reset Semua Data Demo</button>
+            </div>
+        </div>
+
+        <!-- Journal Modal -->
+        <div class="modal-overlay" id="journalModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="app.closeModal('journalModal')">&times;</button>
+                <h3 class="mb-1">Self-Care Journal</h3>
+                <p class="text-muted mb-1" style="font-size:0.9rem;">Tuliskan apa yang Anda rasakan atau syukuri hari ini. Jurnal ini hanya disimpan di perangkat Anda.</p>
+                <div class="form-group">
+                    <textarea class="form-control" id="journal-text" placeholder="Hari ini saya merasa..."></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%" onclick="app.saveJournal()">Simpan Jurnal</button>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toast-container"></div>
+
+        <footer>
+            <div class="footer-logo">IBUASA</div>
+            <p class="text-muted mb-2">Supporting mothers through information, connection, and opportunity.</p>
+            <div class="footer-links">
+                <a href="#">About Prototype</a>
+                <a href="#">Privacy</a>
+                <a href="#">Disclaimer</a>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--muted-text);">© 2026 IBUASA Prototype. "IBUASA IS A BRIDGE, NOT A REPLACEMENT."</p>
+        </footer>
+    </div>
+
+    <script>
+        const app = {
+            state: {
+                name: 'Mom',
+                hasCompletedCheck: false,
+                profile: { readiness: '', wellbeing: '', social: '', economic: '' },
+                stats: { course: 0, mind: 0, skill: 0, bridge: 0 },
+                activities: []
+            },
+
+            init() {
+                this.loadState();
+                this.navigate('home');
+                this.updateUI();
+                
+                // Desktop nav listeners
+                document.querySelectorAll('.desktop-nav a').forEach(a => {
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.navigate(e.target.dataset.nav);
+                    });
+                });
+            },
+
+            loadState() {
+                const saved = localStorage.getItem('ibuasa_state');
+                if (saved) {
+                    this.state = JSON.parse(saved);
+                }
+            },
+
+            saveState() {
+                localStorage.setItem('ibuasa_state', JSON.stringify(this.state));
+                this.updateUI();
+            },
+
+            navigate(pageId) {
+                // Hide all sections
+                document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+                // Show target
+                document.getElementById(`page-${pageId}`).classList.add('active');
+                window.scrollTo(0, 0);
+
+                // Update nav active states
+                document.querySelectorAll('.desktop-nav a, .mobile-nav-item').forEach(el => {
+                    el.classList.remove('active');
+                    if(el.dataset.nav === pageId) el.classList.add('active');
+                });
+
+                // Special handling for Check page visibility
+                if (pageId === 'check') {
+                    if (this.state.hasCompletedCheck) {
+                        document.getElementById('check-intro').classList.add('hidden');
+                        document.getElementById('check-form').classList.add('hidden');
+                        document.getElementById('check-result').classList.remove('hidden');
+                        this.renderProfileResult();
+                    } else {
+                        document.getElementById('check-intro').classList.remove('hidden');
+                        document.getElementById('check-form').classList.add('hidden');
+                        document.getElementById('check-result').classList.add('hidden');
+                    }
+                }
+                
+                // Special handling for Journey empty state
+                if (pageId === 'journey') {
+                    if(this.state.activities.length === 0 && !this.state.hasCompletedCheck) {
+                        document.getElementById('journey-empty').classList.remove('hidden');
+                        document.getElementById('journey-stats').classList.add('hidden');
+                    } else {
+                        document.getElementById('journey-empty').classList.add('hidden');
+                        document.getElementById('journey-stats').classList.remove('hidden');
+                        this.renderJourney();
+                    }
+                }
+            },
+
+            updateUI() {
+                // Update Prepare Progress
+                const maxCourses = 3;
+                const completed = Math.min(this.state.stats.course, maxCourses);
+                document.getElementById('prepare-completed').innerText = completed;
+                document.getElementById('prepare-progress-bar').style.width = `${(completed/maxCourses)*100}%`;
+            },
+
+            openModal(id) {
+                if(id === 'profileModal') document.getElementById('profile-name').value = this.state.name;
+                document.getElementById(id).classList.add('active');
+            },
+
+            closeModal(id) {
+                document.getElementById(id).classList.remove('active');
+            },
+
+            showToast(message) {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.innerHTML = `<i class="fa-solid fa-check-circle" style="color:var(--primary-green); margin-right:8px;"></i> ${message}`;
+                container.appendChild(toast);
+                setTimeout(() => {
+                    if (container.contains(toast)) container.removeChild(toast);
+                }, 3000);
+            },
+
+            saveProfile() {
+                this.state.name = document.getElementById('profile-name').value || 'Mom';
+                this.saveState();
+                this.closeModal('profileModal');
+                this.showToast('Profil berhasil disimpan');
+            },
+
+            resetData() {
+                localStorage.removeItem('ibuasa_state');
+                location.reload();
+            },
+
+            logActivity(title) {
+                const date = new Date().toLocaleDateString('id-ID', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+                this.state.activities.unshift({ title, date });
+                if(this.state.activities.length > 10) this.state.activities.pop(); // Keep last 10
+            },
+
+            completeAction(type, title) {
+                if(type === 'course') this.state.stats.course++;
+                if(type === 'mindcheck') this.state.stats.mind++;
+                if(type === 'skill') this.state.stats.skill++;
+                if(type === 'bridge') this.state.stats.bridge++;
+                
+                this.logActivity(`Menyelesaikan: ${title}`);
+                this.saveState();
+                this.showToast(`Aktivitas tercatat di Mom-Journey!`);
+            },
+
+            saveJournal() {
+                const text = document.getElementById('journal-text').value;
+                if(!text.trim()) return;
+                this.completeAction('mindcheck', 'Menulis Jurnal Self-Care');
+                document.getElementById('journal-text').value = '';
+                this.closeModal('journalModal');
+            },
+
+            breathInterval: null,
+            toggleBreathing() {
+                const circle = document.getElementById('breath-circle');
+                const text = document.getElementById('breath-instruction');
+                const btn = document.getElementById('btn-breath');
+                
+                if(this.breathInterval) {
+                    // Stop
+                    clearInterval(this.breathInterval);
+                    this.breathInterval = null;
+                    circle.className = 'breath-circle';
+                    text.innerText = 'Selesai';
+                    btn.innerText = 'Mulai Latihan (1 Menit)';
+                    this.completeAction('mindcheck', 'Latihan Pernapasan Selesai');
+                    setTimeout(() => text.innerText = 'Mulai', 2000);
+                    return;
+                }
+
+                // Start
+                btn.innerText = 'Hentikan Latihan';
+                let step = 0;
+                
+                const cycle = () => {
+                    if(step === 0) {
+                        circle.className = 'breath-circle inhale';
+                        text.innerText = 'Tarik Napas...';
+                        step = 1;
+                    } else if (step === 1) {
+                        circle.className = 'breath-circle hold';
+                        text.innerText = 'Tahan...';
+                        step = 2;
+                    } else {
+                        circle.className = 'breath-circle exhale';
+                        text.innerText = 'Hembuskan...';
+                        step = 0;
+                    }
+                };
+
+                cycle(); // initial
+                this.breathInterval = setInterval(cycle, 4000); // 4s per phase
+
+                // Auto stop after 1 minute (15 cycles of 4s)
+                setTimeout(() => {
+                    if(this.breathInterval) this.toggleBreathing();
+                }, 60000);
+            },
+
+            renderJourney() {
+                document.getElementById('stat-course').innerText = this.state.stats.course;
+                document.getElementById('stat-mind').innerText = this.state.stats.mind;
+                document.getElementById('stat-skill').innerText = this.state.stats.skill;
+                document.getElementById('stat-bridge').innerText = this.state.stats.bridge;
+
+                const logContainer = document.getElementById('activity-log');
+                logContainer.innerHTML = '';
+                if(this.state.activities.length === 0) {
+                    logContainer.innerHTML = '<li class="text-muted">Belum ada aktivitas.</li>';
+                } else {
+                    this.state.activities.forEach(act => {
+                        logContainer.innerHTML += `
+                            <li style="padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
+                                <b>${act.title}</b>
+                                <div class="text-muted" style="font-size:0.8rem;">${act.date}</div>
+                            </li>
+                        `;
+                    });
+                }
+            },
+
+            renderProfileResult() {
+                const p = this.state.profile;
+                document.getElementById('res-readiness').innerText = p.readiness;
+                document.getElementById('res-wellbeing').innerText = p.wellbeing;
+                document.getElementById('res-economic').innerText = p.economic;
+                document.getElementById('res-social').innerText = p.social;
+
+                const recList = document.getElementById('recommendation-list');
+                recList.innerHTML = '';
+                
+                if(p.readiness === 'Perlu Penguatan') {
+                    recList.innerHTML += `<li><b>PREPARE:</b> Mulai dengan membaca materi dasar Motherhood Readiness. <a href="#" onclick="app.navigate('prepare')" style="color:var(--primary-green)">Buka Prepare</a></li>`;
+                } else {
+                    recList.innerHTML += `<li><b>PREPARE:</b> Lanjutkan eksplorasi materi sesuai kebutuhanmu.</li>`;
+                }
+
+                if(p.wellbeing === 'Perlu Perhatian' || p.wellbeing === 'Beresiko') {
+                    recList.innerHTML += `<li><b>PROTECT:</b> Luangkan waktu untuk self-care atau hubungi tenaga profesional jika merasa berat. <a href="#" onclick="app.navigate('protect')" style="color:var(--pink-accent)">Buka Protect</a></li>`;
+                }
+
+                if(p.economic === 'Ingin Berkembang') {
+                    recList.innerHTML += `<li><b>PROPEL:</b> Lakukan Skill Scan untuk memetakan potensimu. <a href="#" onclick="app.navigate('propel')" style="color:#D4A373">Buka Propel</a></li>`;
+                }
+
+                if(p.social === 'Kurang Dukungan') {
+                    recList.innerHTML += `<li><b>CARE BRIDGE:</b> Jangan hadapi sendiri. Temukan komunitas atau hubungi Posyandu/Puskesmas terdekat. <a href="#" onclick="app.navigate('bridge')" style="color:#9013FE">Buka Care Bridge</a></li>`;
+                }
+
+                if(recList.innerHTML === '') {
+                     recList.innerHTML = `<li>Terus pantau kondisimu dan jelajahi seluruh fitur IBUASA untuk menambah wawasan.</li>`;
+                }
+            }
+        };
+
+        const checkEngine = {
+            currentStep: 0,
+            answers: {},
+            questions: [
+                {
+                    id: 'q1', title: 'Fase Motherhood', desc: 'Saat ini Anda berada di fase mana?',
+                    options: [
+                        {val: 'prep', text: 'Sedang mempersiapkan diri (Hamil/Merencanakan)'},
+                        {val: 'new', text: 'Ibu Baru (Anak < 1 tahun)'},
+                        {val: 'toddler', text: 'Ibu dengan Balita (1-5 tahun)'},
+                        {val: 'other', text: 'Fase lainnya'}
+                    ]
+                },
+                {
+                    id: 'q2', title: 'Kesiapan & Pengetahuan', desc: 'Seberapa yakin Anda dengan pengetahuan parenting dan perawatan anak saat ini?',
+                    options: [
+                        {val: '1', text: 'Sangat kurang, butuh banyak bimbingan'},
+                        {val: '2', text: 'Cukup, tapi masih sering ragu'},
+                        {val: '3', text: 'Cukup percaya diri, selalu belajar hal baru'}
+                    ]
+                },
+                {
+                    id: 'q3', title: 'Kondisi Emosional (Well-being)', desc: 'Dalam 2 minggu terakhir, bagaimana perasaan Anda secara umum?',
+                    options: [
+                        {val: 'good', text: 'Tenang dan terkendali'},
+                        {val: 'tired', text: 'Sering lelah, tapi masih bisa ditangani'},
+                        {val: 'stressed', text: 'Sering cemas, mudah menangis, atau sangat tertekan'}
+                    ]
+                },
+                {
+                    id: 'q4', title: 'Dukungan Sosial', desc: 'Apakah Anda memiliki sistem dukungan (suami, keluarga, teman) yang membantu pengasuhan?',
+                    options: [
+                        {val: 'high', text: 'Ya, dukungan sangat penuh'},
+                        {val: 'med', text: 'Ada, tapi kadang merasa kurang'},
+                        {val: 'low', text: 'Tidak ada / merasa berjuang sendiri'}
+                    ]
+                },
+                {
+                    id: 'q5', title: 'Pengembangan Diri & Ekonomi', desc: 'Bagaimana pandangan Anda terhadap pengembangan keterampilan atau ekonomi saat ini?',
+                    options: [
+                        {val: 'focus', text: 'Sedang fokus penuh pada anak, belum memikirkan'},
+                        {val: 'want', text: 'Ingin belajar keterampilan baru / menambah penghasilan dari rumah'},
+                        {val: 'need', text: 'Sangat membutuhkan peluang ekonomi segera'}
+                    ]
+                }
+            ],
+
+            start() {
+                this.currentStep = 0;
+                this.answers = {};
+                document.getElementById('check-intro').classList.add('hidden');
+                document.getElementById('check-result').classList.add('hidden');
+                document.getElementById('check-form').classList.remove('hidden');
+                this.renderStep();
+            },
+
+            renderStep() {
+                const q = this.questions[this.currentStep];
+                const container = document.getElementById('questions-container');
+                
+                // Update Progress bar
+                const progress = ((this.currentStep) / this.questions.length) * 100;
+                document.getElementById('check-progress').style.width = `${progress}%`;
+                document.getElementById('step-indicator').innerText = `Step ${this.currentStep + 1} / ${this.questions.length}`;
+
+                // Buttons visibility
+                document.getElementById('btn-prev-check').style.visibility = this.currentStep > 0 ? 'visible' : 'hidden';
+                const nextBtn = document.getElementById('btn-next-check');
+                if (this.currentStep === this.questions.length - 1) {
+                    nextBtn.innerText = 'Selesai & Lihat Hasil';
+                    nextBtn.classList.remove('btn-outline');
+                    nextBtn.classList.add('btn-primary');
+                } else {
+                    nextBtn.innerText = 'Selanjutnya';
+                }
+
+                // Render HTML
+                let html = `
+                    <div class="step-content active">
+                        <h3 class="mb-1">${q.title}</h3>
+                        <p class="text-muted mb-2">${q.desc}</p>
+                `;
+
+                q.options.forEach((opt, idx) => {
+                    const isSelected = this.answers[q.id] === opt.val ? 'selected' : '';
+                    html += `
+                        <div class="option-card ${isSelected}" onclick="checkEngine.selectOption('${q.id}', '${opt.val}', this)">
+                            <div style="width:20px; height:20px; border-radius:50%; border:2px solid var(--border-color); display:flex; align-items:center; justify-content:center;" class="radio-indicator">
+                                <div style="width:10px; height:10px; border-radius:50%; background: ${isSelected ? 'var(--primary-green)' : 'transparent'};"></div>
+                            </div>
+                            <span>${opt.text}</span>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                container.innerHTML = html;
+            },
+
+            selectOption(qId, val, el) {
+                this.answers[qId] = val;
+                // UI update
+                const siblings = el.parentElement.querySelectorAll('.option-card');
+                siblings.forEach(s => {
+                    s.classList.remove('selected');
+                    s.querySelector('.radio-indicator div').style.background = 'transparent';
+                });
+                el.classList.add('selected');
+                el.querySelector('.radio-indicator div').style.background = 'var(--primary-green)';
+            },
+
+            prev() {
+                if(this.currentStep > 0) {
+                    this.currentStep--;
+                    this.renderStep();
+                }
+            },
+
+            next() {
+                const qId = this.questions[this.currentStep].id;
+                if(!this.answers[qId]) {
+                    app.showToast('Silakan pilih salah satu opsi terlebih dahulu.');
+                    return;
+                }
+
+                if(this.currentStep < this.questions.length - 1) {
+                    this.currentStep++;
+                    this.renderStep();
+                } else {
+                    this.finish();
+                }
+            },
+
+            finish() {
+                // Calculate dummy results based on answers
+                let profile = { readiness: 'Cukup', wellbeing: 'Baik', social: 'Cukup', economic: 'Stabil' };
+
+                if(this.answers.q2 === '1') profile.readiness = 'Perlu Penguatan';
+                
+                if(this.answers.q3 === 'tired') profile.wellbeing = 'Perlu Perhatian';
+                if(this.answers.q3 === 'stressed') profile.wellbeing = 'Beresiko';
+
+                if(this.answers.q4 === 'low') profile.social = 'Kurang Dukungan';
+
+                if(this.answers.q5 === 'want' || this.answers.q5 === 'need') profile.economic = 'Ingin Berkembang';
+
+                app.state.profile = profile;
+                app.state.hasCompletedCheck = true;
+                app.logActivity('Menyelesaikan IBUASA Check Awal');
+                app.saveState();
+                
+                // Final progress bar visual
+                document.getElementById('check-progress').style.width = `100%`;
+                
+                setTimeout(() => {
+                    app.navigate('check'); // This will trigger the result view logic in navigate()
+                    app.showToast('Personal Care Profile berhasil dibuat.');
+                }, 500);
+            }
+        };
+
+        // Initialize App on load
+        window.onload = () => app.init();
+
+    </script>
+</body>
+</html>
